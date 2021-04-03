@@ -103,6 +103,9 @@ ext {
     // Should be set in ${HOME}/.gradle/gradle.properties
     ossrhUser = project.hasProperty('ossrhUser') ? project.property('ossrhUser') : ""
     osshrPassword = project.hasProperty('ossrhPassword') ? project.property('ossrhPassword') : ""
+
+    thredupUser = project.hasProperty('thredupUser') ? project.property('thredupUser') : ""
+    thredupPassword = project.hasProperty('thredupPassword') ? project.property('thredupPassword') : ""
 }
 
 configure([project(':ratelimitj-redis'), project(':ratelimitj-inmemory'), project(':ratelimitj-core'), project(':ratelimitj-dropwizard'),project(':ratelimitj-aerospike')]) {
@@ -144,6 +147,48 @@ configure([project(':ratelimitj-redis'), project(':ratelimitj-inmemory'), projec
                             connection 'scm:git:https://github.com/mokies/ratelimitj.git'
                             developerConnection 'scm:git:git@github.com:mokies/ratelimitj.git'
                             url 'https://github.com/mokies/ratelimitj.git'
+                        }
+
+                        licenses {
+                            license {
+                                name 'Apache License Version 2.0'
+                                url 'http://www.apache.org/licenses/LICENSE-2.0'
+                                distribution 'repo'
+                            }
+                        }
+
+                        developers {
+                            developer {
+                                id = 'mokies'
+                                name = 'Craig Baker'
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    } else if (thredupUser != "") {
+        uploadArchives {
+            repositories {
+                mavenDeployer {
+                    // Target repository
+                    repository(url: "https://thredup.jfrog.io/thredup/libs-release") {
+                        authentication(userName: thredupUser, password: thredupPassword)
+                    }
+                    snapshotRepository(url: "https://thredup.jfrog.io/thredup/libs-snapshot") {
+                        authentication(userName: thredupUser, password: thredupPassword)
+                    }
+
+                    pom.project {
+                        name 'es.moki.ratelimitj'
+                        description 'The RateLimitJ project aims to provide a modular rate limiting solution'
+                        packaging 'jar'
+                        url 'https://github.com/thredup/ratelimitj'
+
+                        scm {
+                            connection 'scm:git:https://github.com/thredup/ratelimitj.git'
+                            developerConnection 'scm:git:git@github.com:thredup/ratelimitj.git'
+                            url 'https://github.com/thredup/ratelimitj.git'
                         }
 
                         licenses {
